@@ -5,12 +5,16 @@
  */
 package ventana;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+
 /**
  *
  * @author Ramon
  */
 public class ventanaPrincipal extends javax.swing.JFrame {
 
+    String direccionArchivo;
     /**
      * Creates new form ventanaPrincipal
      */
@@ -33,10 +37,10 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        itemAbrir = new javax.swing.JMenuItem();
+        itemGuardar = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        itemSalir = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         jMenu1.setText("File");
@@ -51,20 +55,25 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         jMenu3.setText("Archivo");
 
-        jMenuItem1.setText("Abrir");
-        jMenu3.add(jMenuItem1);
-
-        jMenuItem2.setText("Guardar");
-        jMenu3.add(jMenuItem2);
-        jMenu3.add(jSeparator1);
-
-        jMenuItem3.setText("Salir");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        itemAbrir.setText("Abrir");
+        itemAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                itemAbrirActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem3);
+        jMenu3.add(itemAbrir);
+
+        itemGuardar.setText("Guardar");
+        jMenu3.add(itemGuardar);
+        jMenu3.add(jSeparator1);
+
+        itemSalir.setText("Salir");
+        itemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemSalirActionPerformed(evt);
+            }
+        });
+        jMenu3.add(itemSalir);
 
         jMenuBar2.add(jMenu3);
 
@@ -91,10 +100,25 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void itemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemSalirActionPerformed
         //salimos del programa
         System.exit(0);
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_itemSalirActionPerformed
+
+    private void itemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAbrirActionPerformed
+        //obtenemos la direccion del archivo
+        //abrimos la ventana de busqueda
+        JFileChooser jf = new JFileChooser();
+        jf.showOpenDialog(this);
+        
+        //obtenemos la direccion del archivo
+        File archivo = jf.getSelectedFile();
+        
+        //si archivo no esta vacio, mandamos la direccion a la variable direccionArchivo
+        if (archivo!= null) {
+            direccionArchivo = archivo.getAbsolutePath();
+        }
+    }//GEN-LAST:event_itemAbrirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -132,15 +156,15 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem itemAbrir;
+    private javax.swing.JMenuItem itemGuardar;
+    private javax.swing.JMenuItem itemSalir;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
