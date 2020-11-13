@@ -7,6 +7,8 @@ package proyectofinal;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,7 +24,9 @@ public class ERDParser {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException {
-
+        
+        Hashtable<String,ArrayList> hash = new Hashtable<>();
+        
         FileReader fp = new FileReader("Prueba.json");
 
         // Crear el tokenizador del documento JSON  
@@ -44,14 +48,18 @@ public class ERDParser {
 
         // Procesar cada una de las entidades
         while (it.hasNext()) {
-
+            
+            ArrayList atributosEntidades = new ArrayList();
+            
             JSONObject entidad = (JSONObject) it.next();
 
             //names = entidad.names();
             // Para cada entidad, mostrar su nombre
             String entityName = entidad.getString("nombre");
             System.out.println(entityName);
-
+            
+            
+            
             // Para cada entidad, mostrar los atributos
             JSONArray atributos = entidad.getJSONArray("atributos");
             Iterator attribIt = atributos.iterator();
@@ -60,21 +68,30 @@ public class ERDParser {
                 JSONObject atributo = (JSONObject) attribIt.next();
                 System.out.print("\t");
                 System.out.print(atributo.getString("nombre"));
-
+                
+                String atributoTipo = atributo.getString("nombre");
+                
                 //preguntamos por el tipo de atributo
                 switch (atributo.getInt("tipo")) {
-                    case 1:
+                    case 1://llave primaria
                         System.out.println(" **");
+                        atributoTipo += "**";
                         break;
-                    case 2:
+                    case 2://llave forania
                         System.out.println(" *");
+                        atributoTipo += "*";
                         break;
-                    default:
+                    default://atributo comun
                         System.out.println("");
                         break;
                 }
-
+                
+                //agregamos el atributo al array
+                atributosEntidades.add(atributoTipo);
             }
+            
+            //agregamos los datos al hash
+            hash.put(entityName, atributosEntidades);
 
         }
 
@@ -120,7 +137,9 @@ public class ERDParser {
 
         //sacamos las entidades debiles
         while (it.hasNext()) {
-
+            
+            ArrayList atributosEntidades = new ArrayList();
+            
             JSONObject entidadDebil = (JSONObject) it.next();
 
             //names = entidad.names();
@@ -136,7 +155,8 @@ public class ERDParser {
                 JSONObject atributo = (JSONObject) attribIt.next();
                 System.out.print("\t");
                 System.out.print(atributo.getString("nombre"));
-
+                String atributoTipo = atributo.getString("nombre");
+                
                 //preguntamos por el tipo de atributo
                 switch (atributo.getInt("tipo")) {
                     case 1:
@@ -149,8 +169,10 @@ public class ERDParser {
                         System.out.println("");
                         break;
                 }
-
+                
+                atributosEntidades.add(atributoTipo);
             }
+            hash.put(entityName, atributosEntidades);
 
         }
 
