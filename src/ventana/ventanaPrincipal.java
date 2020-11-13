@@ -34,6 +34,9 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         jMenu1.setText("File");
@@ -48,8 +51,20 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         jMenu3.setText("Archivo");
 
-        jMenuItem1.setText("jMenuItem1");
+        jMenuItem1.setText("Abrir");
         jMenu3.add(jMenuItem1);
+
+        jMenuItem2.setText("Guardar");
+        jMenu3.add(jMenuItem2);
+        jMenu3.add(jSeparator1);
+
+        jMenuItem3.setText("Salir");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
 
         jMenuBar2.add(jMenu3);
 
@@ -75,6 +90,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        //salimos del programa
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,6 +139,9 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }
