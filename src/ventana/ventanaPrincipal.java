@@ -6,14 +6,17 @@
 package ventana;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import javax.swing.JFileChooser;
+import proyectofinal.ERDParser;
 
 /**
  *
  * @author Ramon
  */
 public class ventanaPrincipal extends javax.swing.JFrame {
-
+    Hashtable<String,ArrayList> hash ;
     String direccionArchivo;
     /**
      * Creates new form ventanaPrincipal
@@ -118,6 +121,23 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         if (archivo!= null) {
             direccionArchivo = archivo.getAbsolutePath();
         }
+        ERDParser tabla = new ERDParser(direccionArchivo);
+        
+        hash = tabla.crearHash();
+        
+        ArrayList<String> keys = tabla.keys();
+        
+        ArrayList prueba;
+        
+        for (String key : keys) {
+            prueba = hash.get(key);
+            System.out.println(key);
+            for (int i = 0; i < prueba.size(); i++) {
+                System.out.println(prueba.get(i));
+            }
+            System.out.println("----------------------");
+        }
+        
     }//GEN-LAST:event_itemAbrirActionPerformed
 
     /**
