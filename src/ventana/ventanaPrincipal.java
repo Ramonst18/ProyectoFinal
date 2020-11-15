@@ -149,7 +149,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
 
             ArrayList<String> keys = tabla.keys();
 
-            ArrayList atributos;
+            ArrayList<String> atributos;
 
             for (String key : keys) {
                 
@@ -158,9 +158,10 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                 System.out.println(key);
                 
                 //creamos el panel interno
-                ventanaDatos vd = new ventanaDatos();
+                ventanaDatos vd = new ventanaDatos(key,atributos);
                 panelEscritorio.add(vd);
                 vd.show();
+                
                 //pasamos el arrayList con la key que es la entidad y el array atributos q
                 
                 System.out.println("----------------------");

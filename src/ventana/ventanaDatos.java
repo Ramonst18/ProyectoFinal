@@ -5,6 +5,8 @@
  */
 package ventana;
 
+import java.util.ArrayList;
+
 
 /**
  *
@@ -16,9 +18,19 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
      * Creates new form ventanaDatos
      
      */
-    
-    public ventanaDatos() {
+    ArrayList<String> atributos;
+    public ventanaDatos(String key,ArrayList<String> atributos) {
         initComponents();
+        modificarEntidad(key);
+    }
+    
+    private void modificarEntidad(String key){
+        
+        if (key.endsWith("&")) {//checamos si es una entidad fuerte
+            etiquetaEntidad.setText("Entidad: "+key);
+        }else{//si es una entidad debil
+            etiquetaEntidad.setText("Entidad debil: "+key);
+        }
     }
 
     /**
@@ -33,6 +45,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        etiquetaEntidad = new javax.swing.JLabel();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -49,7 +62,10 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 299));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, -1, 299));
+
+        etiquetaEntidad.setText("jLabel1");
+        jPanel1.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,6 +83,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel etiquetaEntidad;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
