@@ -5,10 +5,14 @@
  */
 package ventana;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import proyectofinal.ERDParser;
 
 /**
@@ -21,8 +25,16 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form ventanaPrincipal
      */
+    /*private DefaultComboBoxModel<Ejercicio4_persona> modelo = new DefaultComboBoxModel<Ejercicio4_persona>();*/
+    //se crea un modelo para la tabla
+    private DefaultTableModel modeloTabla = new DefaultTableModel();
+        
+    //ventana interior
+    
+    
     public ventanaPrincipal() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -37,7 +49,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
-        jPanel1 = new javax.swing.JPanel();
+        panelEscritorio = new javax.swing.JDesktopPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         itemAbrir = new javax.swing.JMenuItem();
@@ -53,8 +65,18 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(800, 600));
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        javax.swing.GroupLayout panelEscritorioLayout = new javax.swing.GroupLayout(panelEscritorio);
+        panelEscritorio.setLayout(panelEscritorioLayout);
+        panelEscritorioLayout.setHorizontalGroup(
+            panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+        );
+        panelEscritorioLayout.setVerticalGroup(
+            panelEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
 
         jMenu3.setText("Archivo");
 
@@ -89,15 +111,11 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 839, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panelEscritorio)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 764, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(panelEscritorio)
         );
 
         pack();
@@ -121,22 +139,40 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         if (archivo!= null) {
             direccionArchivo = archivo.getAbsolutePath();
         }
-        ERDParser tabla = new ERDParser(direccionArchivo);
         
-        hash = tabla.crearHash();
-        
-        ArrayList<String> keys = tabla.keys();
-        
-        ArrayList prueba;
-        
-        for (String key : keys) {
-            prueba = hash.get(key);
-            System.out.println(key);
-            for (int i = 0; i < prueba.size(); i++) {
-                System.out.println(prueba.get(i));
+        //comprobamos la extencion del archivo
+        if (direccionArchivo.endsWith(".json")) {
+            //pasamos la direccion del archivo
+            ERDParser tabla = new ERDParser(direccionArchivo);
+
+            hash = tabla.crearHash();
+
+            ArrayList<String> keys = tabla.keys();
+
+            ArrayList atributos;
+
+            for (String key : keys) {
+                
+                //obtenemos el arrayList del hashTable
+                atributos = hash.get(key);
+                System.out.println(key);
+                
+                //creamos el panel interno
+                ventanaDatos vd = new ventanaDatos();
+                panelEscritorio.add(vd);
+                vd.show();
+                //pasamos el arrayList con la key que es la entidad y el array atributos q
+                
+                System.out.println("----------------------");
             }
-            System.out.println("----------------------");
+
+            //nuestro panel escritorio es un JDesltop pane el cual nos permite poner mas ventanas dentro de el
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Archivo incompatible");
         }
+        
+        
         
     }//GEN-LAST:event_itemAbrirActionPerformed
 
@@ -185,7 +221,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JDesktopPane panelEscritorio;
     // End of variables declaration//GEN-END:variables
 }
