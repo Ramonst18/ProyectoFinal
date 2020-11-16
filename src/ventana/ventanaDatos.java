@@ -6,6 +6,7 @@
 package ventana;
 
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -14,23 +15,27 @@ import java.util.ArrayList;
  */
 public class ventanaDatos extends javax.swing.JInternalFrame {
 
+    private DefaultTableModel modeloTabla = new DefaultTableModel();
+    
     /**
      * Creates new form ventanaDatos
      
      */
     ArrayList<String> atributos;
-    public ventanaDatos(String key,ArrayList<String> atributos) {
+    public ventanaDatos(String key,ArrayList<String> atributos,String tipoEntidad) {
         initComponents();
-        modificarEntidad(key);
+        modificarEntidad(key,tipoEntidad);
     }
     
-    private void modificarEntidad(String key){
+    private void modificarEntidad(String key,String tipoEntidad){
         
-        if (key.endsWith("&")) {//checamos si es una entidad fuerte
+        
+        if (tipoEntidad.equals("entidad")) {//entidad fuerte
             etiquetaEntidad.setText("Entidad: "+key);
-        }else{//si es una entidad debil
+        } else{//entidad debil
             etiquetaEntidad.setText("Entidad debil: "+key);
         }
+        
     }
 
     /**

@@ -23,17 +23,23 @@ public class ERDParser {
     
     private String direccion;
     
-    private ArrayList<String> keys = new ArrayList<>();
+    private ArrayList<String> keysEntidades = new ArrayList<>();
     
-    public ArrayList<String> keys(){
-        return keys;
+    public ArrayList<String> keysEntidades(){
+        return keysEntidades;
+    }
+    
+    private ArrayList<String> keysEntidadesDebiles = new ArrayList<>();
+    
+    public ArrayList<String> keysEntidadesDebiles(){
+        return keysEntidadesDebiles;
     }
     
     public ERDParser(String direccion){
         this.direccion = direccion;
     }
     
-    public Hashtable<String,ArrayList> crearHash(){
+    public Hashtable<String,ArrayList> crearHashEntidades(){
         Hashtable<String,ArrayList> hash = new Hashtable<>();
         FileReader fp = null;
         try{
@@ -70,7 +76,8 @@ public class ERDParser {
             String entityName = entidad.getString("nombre");
             System.out.println(entityName);
             
-            keys.add(entityName);
+            //como es primaria se le añadira un & al name
+            this.keysEntidades.add(entityName);
             
             // Para cada entidad, mostrar los atributos
             JSONArray atributos = entidad.getJSONArray("atributos");
@@ -135,6 +142,27 @@ public class ERDParser {
             }
 
         }
+        return hash;
+    }
+    
+    public Hashtable<String,ArrayList> crearHashEntidadesDebiles(){
+        Hashtable<String,ArrayList> hash = new Hashtable<>();
+        FileReader fp = null;
+        try{
+            fp = new FileReader(this.direccion);
+        }catch(FileNotFoundException e){
+            JOptionPane.showMessageDialog(null, "Error al leer el archivo");
+        }
+        // Crear el tokenizador del documento JSON  
+        JSONTokener tokenizer = new JSONTokener(fp);
+
+        // Objeto principal que contiene todos los componentes
+        // del diagrama ERD
+        JSONObject JSONDoc = new JSONObject(tokenizer);
+
+        //Obtenet los nombres de los objetos 
+        JSONArray names = JSONDoc.names();
+        System.out.println(names);
 
         //recuperamos las entidades debiles
         JSONArray relationsDebiles = JSONDoc.getJSONArray("debiles");
@@ -145,7 +173,7 @@ public class ERDParser {
         }
         
 
-        it = relationsDebiles.iterator();
+        Iterator it = relationsDebiles.iterator();
 
         //sacamos las entidades debiles
         while (it.hasNext()) {
@@ -159,7 +187,7 @@ public class ERDParser {
             String entityName = entidadDebil.getString("nombre");
             System.out.println(entityName);
 
-            keys.add(entityName);
+            this.keysEntidadesDebiles.add(entityName);
             
             // Para cada entidad debil, mostrar los atributos
             JSONArray atributos = entidadDebil.getJSONArray("atributos");
@@ -189,7 +217,6 @@ public class ERDParser {
             hash.put(entityName, atributosEntidades);
 
         }
-        
         return hash;
     }
     /*

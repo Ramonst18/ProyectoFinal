@@ -9,10 +9,8 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import proyectofinal.ERDParser;
 
 /**
@@ -20,14 +18,14 @@ import proyectofinal.ERDParser;
  * @author Ramon
  */
 public class ventanaPrincipal extends javax.swing.JFrame {
-    Hashtable<String,ArrayList> hash ;
+    Hashtable<String,ArrayList> hashEntidades;
+    Hashtable<String,ArrayList> hashEntidadesDebiles;
     String direccionArchivo;
     /**
      * Creates new form ventanaPrincipal
      */
     /*private DefaultComboBoxModel<Ejercicio4_persona> modelo = new DefaultComboBoxModel<Ejercicio4_persona>();*/
     //se crea un modelo para la tabla
-    private DefaultTableModel modeloTabla = new DefaultTableModel();
         
     //ventana interior
     
@@ -127,6 +125,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemSalirActionPerformed
 
     private void itemAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemAbrirActionPerformed
+        //nuestro panel escritorio es un JDesltop pane el cual nos permite poner mas ventanas dentro de el
+            
         //obtenemos la direccion del archivo
         //abrimos la ventana de busqueda
         JFileChooser jf = new JFileChooser();
@@ -142,32 +142,62 @@ public class ventanaPrincipal extends javax.swing.JFrame {
         
         //comprobamos la extencion del archivo
         if (direccionArchivo.endsWith(".json")) {
-            //pasamos la direccion del archivo
+            //pasamos la direccion del arc0hivo
             ERDParser tabla = new ERDParser(direccionArchivo);
 
-            hash = tabla.crearHash();
+            //obtenemos el hash de entidades primarias
+            hashEntidades = tabla.crearHashEntidades();
+            
+            if (hashEntidades!= null) {
+                //para entidades fuertes
+                //obtener llaves primarias de las entidades    
+                ArrayList<String> keysEntidades = tabla.keysEntidades();
+                
+                ArrayList<String> atributos;
+                String tipoEntidad;
+                
+                //recorre el arreglo con los atributos
+                for (String key : keysEntidades) {
+                    tipoEntidad = "entidad";
+                    //obtenemos el arrayList del hashTable
+                    atributos = hashEntidades.get(key);
+                    System.out.println(key);
 
-            ArrayList<String> keys = tabla.keys();
+                    //creamos el panel interno
+                    ventanaDatos vd = new ventanaDatos(key, atributos, tipoEntidad);
+                    panelEscritorio.add(vd);
+                    vd.show();
 
-            ArrayList<String> atributos;
-
-            for (String key : keys) {
+                    //pasamos el arrayList con la key que es la entidad y el array atributos q
+                    System.out.println("----------------------");
+                }
                 
-                //obtenemos el arrayList del hashTable
-                atributos = hash.get(key);
-                System.out.println(key);
                 
-                //creamos el panel interno
-                ventanaDatos vd = new ventanaDatos(key,atributos);
-                panelEscritorio.add(vd);
-                vd.show();
+                //entidades debiles, se ocupan las fuertes primero antes de las debiles
+                hashEntidadesDebiles = tabla.crearHashEntidadesDebiles();
                 
-                //pasamos el arrayList con la key que es la entidad y el array atributos q
-                
-                System.out.println("----------------------");
+                //si no esta vacio
+                if (hashEntidadesDebiles!= null) {
+                    ArrayList<String> keysEntidadesDebiles = tabla.keysEntidadesDebiles();
+                    
+                    //recorremos las keys de las entidades debiles
+                    for (String keysDebiles : keysEntidadesDebiles) {
+                        tipoEntidad = "entidadDebil";
+                        
+                        //obtenemos el array
+                        atributos = hashEntidadesDebiles.get(keysDebiles);
+                        System.out.println(keysDebiles);
+                        
+                        //creamos el panel interno
+                        ventanaDatos vd = new ventanaDatos(keysDebiles, atributos, tipoEntidad);
+                        panelEscritorio.add(vd);
+                        vd.show();
+                        System.out.println("-------------------------------");
+                    }
+                }
             }
+            
 
-            //nuestro panel escritorio es un JDesltop pane el cual nos permite poner mas ventanas dentro de el
             
         } else {
             JOptionPane.showMessageDialog(null, "Archivo incompatible");
