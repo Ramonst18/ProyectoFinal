@@ -26,6 +26,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
      
      */
     ArrayList<String> atributos;
+    
     public ventanaDatos(String key,ArrayList<String> atributos,String tipoEntidad) {
         //primero se crea el modelo de la tabla
         agregarModeloTabla();
@@ -81,10 +82,18 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
     //metodo para añadir las casillas de seleccion
     private void addCheckBox(int column,JTable table){
         TableColumn td = table.getColumnModel().getColumn(column);
+        
         td.setCellEditor(table.getDefaultEditor(Boolean.class));
         td.setCellRenderer(table.getDefaultRenderer(Boolean.class));
     }
+    
+    public boolean IsSelected(int row,int column,JTable table){
+        //regresamos si esta seleccionado
+        return table.getValueAt(row, column)!=null;
+    }
 
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -98,16 +107,25 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         etiquetaEntidad = new javax.swing.JLabel();
+        botonGuardar = new javax.swing.JButton();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, -1, 299));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 540, 299));
 
-        etiquetaEntidad.setText("jLabel1");
+        etiquetaEntidad.setText("Entidad");
         jPanel1.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
+
+        botonGuardar.setText("Guardar");
+        botonGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonGuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,8 +141,25 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void botonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarActionPerformed
+        //recorremos la tabla en busca de la llave primaria
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            if (IsSelected(i, 5, jTable1)) {
+                //se guardara como elemento primario
+            }
+        }
+        
+        //recorremos la tabla en busca del elemento not null
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            if (IsSelected(i, 4, jTable1)) {
+                
+            }
+        }
+    }//GEN-LAST:event_botonGuardarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonGuardar;
     private javax.swing.JLabel etiquetaEntidad;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
