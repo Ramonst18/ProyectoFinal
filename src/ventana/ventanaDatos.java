@@ -6,7 +6,9 @@
 package ventana;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.table.DefaultTableModel;
+import proyectofinal.Atributos;
 
 
 /**
@@ -23,6 +25,8 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
      */
     ArrayList<String> atributos;
     public ventanaDatos(String key,ArrayList<String> atributos,String tipoEntidad) {
+        agregarModeloTabla();
+        addRows(atributos);
         initComponents();
         modificarEntidad(key,tipoEntidad);
     }
@@ -36,6 +40,33 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             etiquetaEntidad.setText("Entidad debil: "+key);
         }
         
+    }
+    
+    private void agregarModeloTabla(){
+        //agregamos los nombres de las columnas a la tabla
+        modeloTabla.addColumn("Name");
+        modeloTabla.addColumn("Datatype");
+        modeloTabla.addColumn("Length");
+        modeloTabla.addColumn("Precision");
+        modeloTabla.addColumn("Not NULL?");
+        modeloTabla.addColumn("Primary Key?");
+    }
+    
+    private void addRows(ArrayList<String> atributos){
+        
+        //recorremos los atributos
+        for (String atributo : atributos) {
+            //si es una llave primaria
+            if (atributo.endsWith("**")) {
+                String[] datos = {atributo};
+                //,null,null,null,null,null
+                modeloTabla.addRow(datos);
+            }else{
+                String[] datos = {atributo};
+                //,null,null,null,null,null
+                modeloTabla.addRow(datos);
+            }
+        }
     }
 
     /**
@@ -54,20 +85,10 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, -1, 299));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, -1, 299));
 
         etiquetaEntidad.setText("jLabel1");
         jPanel1.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
