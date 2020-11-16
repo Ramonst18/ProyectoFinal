@@ -7,7 +7,9 @@ package ventana;
 
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import proyectofinal.Atributos;
 
 
@@ -25,10 +27,17 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
      */
     ArrayList<String> atributos;
     public ventanaDatos(String key,ArrayList<String> atributos,String tipoEntidad) {
+        //primero se crea el modelo de la tabla
         agregarModeloTabla();
+        //se añaden los renglones
         addRows(atributos);
         initComponents();
+        //despues de la finalizacion de la creacion se agrega lo siguiente
         modificarEntidad(key,tipoEntidad);
+        
+        //agregamos las checkBox
+        addCheckBox(4,this.jTable1);
+        addCheckBox(5,this.jTable1);
     }
     
     private void modificarEntidad(String key,String tipoEntidad){
@@ -67,6 +76,13 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
                 modeloTabla.addRow(datos);
             }
         }
+    }
+    
+    //metodo para añadir las casillas de seleccion
+    private void addCheckBox(int column,JTable table){
+        TableColumn td = table.getColumnModel().getColumn(column);
+        td.setCellEditor(table.getDefaultEditor(Boolean.class));
+        td.setCellRenderer(table.getDefaultRenderer(Boolean.class));
     }
 
     /**
