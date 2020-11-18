@@ -29,7 +29,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
      */
     ArrayList<String> atributos;
     
-    public ventanaDatos(String key,ArrayList<String> atributos,String tipoEntidad) {
+    public ventanaDatos(String key,ArrayList<Atributos> atributos,String tipoEntidad) {
         //primero se crea el modelo de la tabla
         agregarModeloTabla();
         //se añaden los renglones
@@ -66,20 +66,12 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         modeloTabla.addColumn("Primary Key?");
     }
     
-    private void addRows(ArrayList<String> atributos){
+    private void addRows(ArrayList<Atributos> atributos){
         
         //recorremos los atributos
-        for (String atributo : atributos) {
-            //si es una llave primaria
-            if (atributo.endsWith("**")) {
-                String[] datos = {atributo};
-                //,null,null,null,null,null
-                modeloTabla.addRow(datos);
-            }else{
-                String[] datos = {atributo};
-                //,null,null,null,null,null
-                modeloTabla.addRow(datos);
-            }
+        for (Atributos atributo : atributos) {
+            Object[] atributosv2 = {atributo.getName(),atributo.getData_type(),atributo.getLength(),atributo.getPrecision(),atributo.isNot_null(),atributo.isPrimary_key()};
+            modeloTabla.addRow(atributosv2);
         }
     }
     

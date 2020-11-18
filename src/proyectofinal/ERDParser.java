@@ -67,7 +67,7 @@ public class ERDParser {
         // Procesar cada una de las entidades
         while (it.hasNext()) {
             
-            ArrayList<String> atributosEntidades = new ArrayList();
+            ArrayList<Atributos> atributosEntidades = new ArrayList();
             
             JSONObject entidad = (JSONObject) it.next();
 
@@ -90,23 +90,26 @@ public class ERDParser {
                 
                 String atributoTipo = atributo.getString("nombre");
                 
+                Atributos entidadConAtribos = null;
+                
                 //preguntamos por el tipo de atributo
                 switch (atributo.getInt("tipo")) {
                     case 1://llave primaria
                         System.out.println(" **");
-                        atributoTipo += "**";
+                        entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, true);
                         break;
                     case 2://llave forania
                         System.out.println(" *");
-                        atributoTipo += "*";
+                        entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, false);
                         break;
                     default://atributo comun
                         System.out.println("");
+                        entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, false);
                         break;
                 }
                 
                 //agregamos el atributo al array
-                atributosEntidades.add(atributoTipo);
+                atributosEntidades.add(entidadConAtribos);
             }
             
             //agregamos los datos al hash
@@ -178,7 +181,7 @@ public class ERDParser {
         //sacamos las entidades debiles
         while (it.hasNext()) {
             System.out.println("**** Entidades debiles ****");
-            ArrayList<String> atributosEntidades = new ArrayList();
+            ArrayList<Atributos> atributosEntidades = new ArrayList();
             
             JSONObject entidadDebil = (JSONObject) it.next();
 
@@ -199,20 +202,25 @@ public class ERDParser {
                 System.out.print(atributo.getString("nombre"));
                 String atributoTipo = atributo.getString("nombre");
                 
+                Atributos entidadConAtribos = null;
+                
                 //preguntamos por el tipo de atributo
                 switch (atributo.getInt("tipo")) {
-                    case 1:
+                    case 1://llave primaria
                         System.out.println(" **");
+                        entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, true);
                         break;
-                    case 2:
+                    case 2://llave forania
                         System.out.println(" *");
+                        entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, false);
                         break;
-                    default:
+                    default://atributo comun
                         System.out.println("");
+                        entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, false);
                         break;
                 }
                 
-                atributosEntidades.add(atributoTipo);
+                atributosEntidades.add(entidadConAtribos);
             }
             hash.put(entityName, atributosEntidades);
 

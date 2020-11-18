@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import proyectofinal.Atributos;
 import proyectofinal.ERDParser;
 
 /**
@@ -153,7 +154,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                 //obtener llaves primarias de las entidades    
                 ArrayList<String> keysEntidades = tabla.keysEntidades();
                 
-                ArrayList<String> atributos;
+                ArrayList<Atributos> atributos;
                 String tipoEntidad;
                 
                 //recorre el arreglo con los atributos
