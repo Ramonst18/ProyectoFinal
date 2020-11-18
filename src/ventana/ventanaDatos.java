@@ -6,7 +6,9 @@
 package ventana;
 
 import java.util.ArrayList;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -36,6 +38,8 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         //despues de la finalizacion de la creacion se agrega lo siguiente
         modificarEntidad(key,tipoEntidad);
         
+        //agregamos el comboBox
+        addComboBox(1, jTable1);
         //agregamos las checkBox
         addCheckBox(4,this.jTable1);
         addCheckBox(5,this.jTable1);
@@ -92,7 +96,20 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         return table.getValueAt(row, column)!=null;
     }
 
-    
+    private void addComboBox(int column, JTable table){
+        //obtenemos la columna de la tabla
+        TableColumn td = table.getColumnModel().getColumn(column);
+        
+        //creamos el comboBox
+        JComboBox comboBox = new JComboBox();
+        comboBox.addItem("INT");
+        comboBox.addItem("VARCHAR");
+        comboBox.addItem("FLOAT");
+        
+        
+        //añadimos el combo box a la tabla
+        td.setCellEditor(new DefaultCellEditor(comboBox));
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,24 +125,32 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         etiquetaEntidad = new javax.swing.JLabel();
         botonGuardar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 540, 299));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 560, 299));
 
         etiquetaEntidad.setText("Entidad");
         jPanel1.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
 
-        botonGuardar.setText("Guardar");
+        botonGuardar.setText("Crear codigo SQL");
         botonGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, -1, -1));
+        jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 290, 300));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -163,6 +188,8 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel etiquetaEntidad;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
