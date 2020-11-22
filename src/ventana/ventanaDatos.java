@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import proyectofinal.Atributos;
 
@@ -75,6 +78,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         }
     }
     
+    
     //metodo para añadir las casillas de seleccion
     private void addCheckBox(int column,JTable table){
         TableColumn td = table.getColumnModel().getColumn(column);
@@ -118,7 +122,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         etiquetaEntidad = new javax.swing.JLabel();
         botonGuardar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        codigoAreaTexto = new javax.swing.JTextArea();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -138,9 +142,10 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         });
         jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        this.codigoAreaTexto.setEditable(false);
+        codigoAreaTexto.setColumns(20);
+        codigoAreaTexto.setRows(5);
+        jScrollPane2.setViewportView(codigoAreaTexto);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 290, 300));
 
@@ -159,29 +164,20 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarActionPerformed
-        //recorremos la tabla en busca de la llave primaria
+        //recorremos la tabla por renglones
         for (int i = 0; i < jTable1.getRowCount(); i++) {
-            if (IsSelected(i, 5, jTable1)) {
-                //se guardara como elemento primario
-            }
-        }
-        
-        //recorremos la tabla en busca del elemento not null
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            if (IsSelected(i, 4, jTable1)) {
-                
-            }
+            
         }
     }//GEN-LAST:event_botonGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonGuardar;
+    private javax.swing.JTextArea codigoAreaTexto;
     private javax.swing.JLabel etiquetaEntidad;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
