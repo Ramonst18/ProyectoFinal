@@ -10,6 +10,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -42,14 +43,21 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         modificarEntidad(key,tipoEntidad);
         
         //agregamos el comboBox
-        addComboBox(1, jTable1);
+        addComboBox(1, this.jTable1);
         //agregamos las checkBox
         addCheckBox(4,this.jTable1);
         addCheckBox(5,this.jTable1);
+        
+        //obtenerSeleccion(this.jTable1.getSelectedColumn(), this.jTable1.getSelectedRow(), jTable1);
+    }
+    
+    private void obtenerSeleccion(int columna, int renglon,JTable table){
+        System.out.println(columna + " " + renglon);
+        Atributos at = (Atributos)table.getValueAt(renglon, columna);
+        System.out.println(at.getName());
     }
     
     private void modificarEntidad(String key,String tipoEntidad){
-        
         
         if (tipoEntidad.equals("entidad")) {//entidad fuerte
             etiquetaEntidad.setText("Entidad: "+key);
@@ -91,7 +99,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         //regresamos si esta seleccionado
         return table.getValueAt(row, column)!=null;
     }
-
+    
     private void addComboBox(int column, JTable table){
         //obtenemos la columna de la tabla
         TableColumn td = table.getColumnModel().getColumn(column);
@@ -121,8 +129,6 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         etiquetaEntidad = new javax.swing.JLabel();
         botonGuardar = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        codigoAreaTexto = new javax.swing.JTextArea();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -134,20 +140,13 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         etiquetaEntidad.setText("Entidad");
         jPanel1.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
 
-        botonGuardar.setText("Crear codigo SQL");
+        botonGuardar.setText("Crear tabla y modelo relacional");
         botonGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
-
-        this.codigoAreaTexto.setEditable(false);
-        codigoAreaTexto.setColumns(20);
-        codigoAreaTexto.setRows(5);
-        jScrollPane2.setViewportView(codigoAreaTexto);
-
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 30, 290, 300));
+        jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,11 +172,9 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonGuardar;
-    private javax.swing.JTextArea codigoAreaTexto;
     private javax.swing.JLabel etiquetaEntidad;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
