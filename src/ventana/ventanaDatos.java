@@ -7,18 +7,11 @@ package ventana;
 
 import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import proyectofinal.Atributos;
-
-
 /**
  *
  * @author Ramon
@@ -26,7 +19,7 @@ import proyectofinal.Atributos;
 public class ventanaDatos extends javax.swing.JInternalFrame {
 
     private DefaultTableModel modeloTabla = new DefaultTableModel();
-    
+    private String tipoEntidad;
     /**
      * Creates new form ventanaDatos
      
@@ -41,13 +34,12 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         initComponents();
         //despues de la finalizacion de la creacion se agrega lo siguiente
         modificarEntidad(key,tipoEntidad);
-        
+        this.tipoEntidad = tipoEntidad;
         //agregamos el comboBox
         addComboBox(1, this.jTable1);
         //agregamos las checkBox
         addCheckBox(4,this.jTable1);
         addCheckBox(5,this.jTable1);
-        
         //obtenerSeleccion(this.jTable1.getSelectedColumn(), this.jTable1.getSelectedRow(), jTable1);
     }
     
@@ -164,9 +156,43 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
     private void botonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonGuardarActionPerformed
         //recorremos la tabla por renglones
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            
+        String modeloRelacional = "";
+        if (tipoEntidad.toLowerCase().equals("entidad")) {
+            String[] palabras = etiquetaEntidad.getText().split(" ");
+            modeloRelacional += palabras[1]+"(";
+        }else{
+            String[] palabras = etiquetaEntidad.getText().split(" ");
+            modeloRelacional += palabras[2]+"(";
         }
+        
+        
+        //ddefinimos la longitud de los atributos y las columnas
+        Atributos[] atributosTabla = new Atributos[modeloTabla.getRowCount()];
+        String[] names = new String[modeloTabla.getRowCount()];
+        
+        //recorremos la tabla para llenar los atributos
+        for (int i = 0; i < modeloTabla.getRowCount(); i++) {
+            String name = (String)modeloTabla.getValueAt(i, 0);//obtenemos el nombre del atributo
+            String dataType = (String)modeloTabla.getValueAt(i, 1);//obtenemos el tipo de dato
+            String length = (String)modeloTabla.getValueAt(i, 2);//obtenemos la longitud
+            String precision = (String)modeloTabla.getValueAt(i, 3);//obtenemos la precision
+            boolean not_null = (boolean)modeloTabla.getValueAt(i, 4);//obtenemos si es o no nulo
+            boolean primary_key = (boolean)modeloTabla.getValueAt(i, 5);//obtenemos si es llave primaria o no
+            atributosTabla[i] = new Atributos(name, dataType, length, precision, not_null, primary_key);
+            
+            names[i] = name;
+            if (primary_key == true) {
+                modeloRelacional += name +"* , ";
+            }else{
+                modeloRelacional += name;
+            }
+        }
+        
+        modeloRelacional += ")";//se añade el final
+        System.out.println(modeloRelacional);
+        tablaDatosSQL tabla = new tablaDatosSQL(atributosTabla,names,modeloRelacional);
+        tabla.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_botonGuardarActionPerformed
 
 

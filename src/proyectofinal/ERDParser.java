@@ -114,7 +114,6 @@ public class ERDParser {
             
             //agregamos los datos al hash
             hash.put(entityName, atributosEntidades);
-
         }
 
         // Solo recuperar los objetos que describen entidades
