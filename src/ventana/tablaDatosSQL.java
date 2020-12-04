@@ -5,6 +5,7 @@
  */
 package ventana;
 
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import proyectofinal.Atributos;
 
@@ -15,24 +16,51 @@ import proyectofinal.Atributos;
 public class tablaDatosSQL extends javax.swing.JFrame {
 
     private DefaultTableModel modeloTabla = new DefaultTableModel();
-    
-    public tablaDatosSQL(Atributos[] atributos,String[] names,String modeloRelacional) {
-        agregarModeloTabla(names);
+    private String nombreEntidad;
+    public tablaDatosSQL(Atributos[] atributos) {
         initComponents();
-        this.areaModeloRelacional.setText(modeloRelacional);
+        //dividimos el modelo relacional en espacios
+        
+        //creamos el codigo SQL
         crearCodigoSQL(atributos);
     }
 
     
-    private void agregarModeloTabla(String[] names){
-        //agregamos los nombres de las columnas a la tabla
-        for (int i = 0; i < names.length; i++) {
-            modeloTabla.addColumn(names[i]);
-        }
-    }
     
     private void crearCodigoSQL(Atributos[] atributos){
-    
+        String codigoSQL = "CREATE TABLE \"" + this.nombreEntidad + "\" \n(\n";
+        
+        //recorremos todos los atributos
+        ArrayList<String> columnasPrimarias = new ArrayList<>();
+        for (int i = 0; i < atributos.length; i++) {
+            //obtenemos el nombre
+            String name = atributos[i].getName();
+            codigoSQL += "\t " + name +" ";
+            
+            String tipo = atributos[i].getData_type();
+            if (tipo.toLowerCase().equals("integer")) {
+                codigoSQL += tipo.toLowerCase() + " ";
+            } else if (tipo.toLowerCase().equals("varying")) {
+                int longitud = Integer.parseInt(atributos[i].getLength());
+                codigoSQL += tipo.toLowerCase() + "("+longitud+") ";
+            }
+            
+            //checmos si es nulo
+            boolean noNulo = atributos[i].isNot_null();
+            if (noNulo == true) {
+                codigoSQL += "NOT NULL";
+            }
+            
+            //checamos si es llave primaria
+            boolean primaryKey = atributos[i].isPrimary_key();
+            if (primaryKey == true) {
+                columnasPrimarias.add(name);
+            }
+            
+            
+        }
+        areaSQL.setText(codigoSQL);
+        
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -42,7 +70,7 @@ public class tablaDatosSQL extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        areaSQL = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         areaModeloRelacional = new javax.swing.JTextArea();
 
@@ -55,9 +83,9 @@ public class tablaDatosSQL extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, 540, 110));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        areaSQL.setColumns(20);
+        areaSQL.setRows(5);
+        jScrollPane2.setViewportView(areaSQL);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(545, 0, 210, 166));
 
@@ -111,18 +139,18 @@ public class tablaDatosSQL extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new tablaDatosSQL(null,null,null).setVisible(true);
+                new tablaDatosSQL(null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaModeloRelacional;
+    private javax.swing.JTextArea areaSQL;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

@@ -8,6 +8,7 @@ package ventana;
 import java.util.ArrayList;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -20,12 +21,12 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
     private DefaultTableModel modeloTabla = new DefaultTableModel();
     private String tipoEntidad;
+    private String key;
     /**
      * Creates new form ventanaDatos
      
      */
     ArrayList<String> atributos;
-    
     public ventanaDatos(String key,ArrayList<Atributos> atributos,String tipoEntidad) {
         //primero se crea el modelo de la tabla
         agregarModeloTabla();
@@ -35,11 +36,14 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         //despues de la finalizacion de la creacion se agrega lo siguiente
         modificarEntidad(key,tipoEntidad);
         this.tipoEntidad = tipoEntidad;
+        this.key = key;
         //agregamos el comboBox
         addComboBox(1, this.jTable1);
+        
         //agregamos las checkBox
         addCheckBox(4,this.jTable1);
         addCheckBox(5,this.jTable1);
+        
         //obtenerSeleccion(this.jTable1.getSelectedColumn(), this.jTable1.getSelectedRow(), jTable1);
     }
     
@@ -98,10 +102,10 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         
         //creamos el comboBox
         JComboBox comboBox = new JComboBox();
-        comboBox.addItem("INT");
-        comboBox.addItem("VARCHAR");
-        comboBox.addItem("FLOAT");
-        
+        comboBox.addItem("SERIAL");
+        comboBox.addItem("VARYING");
+        comboBox.addItem("INTEGER");
+        comboBox.addItem("DATE");
         
         //añadimos el combo box a la tabla
         td.setCellEditor(new DefaultCellEditor(comboBox));
@@ -116,21 +120,27 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        panelColumas = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         etiquetaEntidad = new javax.swing.JLabel();
         botonGuardar = new javax.swing.JButton();
+        panelSQL = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        textoCodigoSQL = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        textoModeloRelacional = new javax.swing.JTextArea();
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelColumas.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTable1.setModel(modeloTabla);
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 560, 299));
+        panelColumas.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 560, 270));
 
         etiquetaEntidad.setText("Entidad");
-        jPanel1.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
+        panelColumas.add(etiquetaEntidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, 20));
 
         botonGuardar.setText("Crear tabla y modelo relacional");
         botonGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -138,17 +148,51 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
                 botonGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
+        panelColumas.add(botonGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
+
+        jTabbedPane1.addTab("Columnas", panelColumas);
+
+        textoCodigoSQL.setColumns(20);
+        textoCodigoSQL.setRows(5);
+        jScrollPane2.setViewportView(textoCodigoSQL);
+
+        textoModeloRelacional.setColumns(20);
+        textoModeloRelacional.setRows(5);
+        jScrollPane3.setViewportView(textoModeloRelacional);
+
+        javax.swing.GroupLayout panelSQLLayout = new javax.swing.GroupLayout(panelSQL);
+        panelSQL.setLayout(panelSQLLayout);
+        panelSQLLayout.setHorizontalGroup(
+            panelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
+        );
+        panelSQLLayout.setVerticalGroup(
+            panelSQLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSQLLayout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("SQL", panelSQL);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -159,16 +203,15 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         String modeloRelacional = "";
         if (tipoEntidad.toLowerCase().equals("entidad")) {
             String[] palabras = etiquetaEntidad.getText().split(" ");
-            modeloRelacional += palabras[1]+"(";
+            modeloRelacional += palabras[1]+" (";
         }else{
             String[] palabras = etiquetaEntidad.getText().split(" ");
-            modeloRelacional += palabras[2]+"(";
+            modeloRelacional += palabras[2]+" (";
         }
         
         
         //ddefinimos la longitud de los atributos y las columnas
         Atributos[] atributosTabla = new Atributos[modeloTabla.getRowCount()];
-        String[] names = new String[modeloTabla.getRowCount()];
         
         //recorremos la tabla para llenar los atributos
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
@@ -180,27 +223,78 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             boolean primary_key = (boolean)modeloTabla.getValueAt(i, 5);//obtenemos si es llave primaria o no
             atributosTabla[i] = new Atributos(name, dataType, length, precision, not_null, primary_key);
             
-            names[i] = name;
             if (primary_key == true) {
                 modeloRelacional += name +"* , ";
             }else{
-                modeloRelacional += name;
+                //si la i al sumarse llegase a ser el numero de renglones
+                if ((i+1) == modeloTabla.getRowCount()) {
+                    modeloRelacional += name;
+                }else{
+                    modeloRelacional += name + " , ";
+                }
             }
         }
         
         modeloRelacional += ")";//se añade el final
-        System.out.println(modeloRelacional);
-        tablaDatosSQL tabla = new tablaDatosSQL(atributosTabla,names,modeloRelacional);
-        tabla.setVisible(true);
-        this.dispose();
+        textoModeloRelacional.setText(modeloRelacional);
+        crearCodigoSQL(atributosTabla);
     }//GEN-LAST:event_botonGuardarActionPerformed
+    
+    private void crearCodigoSQL(Atributos[] atributos) {
+        String codigoSQL = "CREATE TABLE " + this.key + " \n(\n";
 
+        //recorremos todos los atributos
+        ArrayList<String> llavesPrimarias = new ArrayList<>();
+        for (int i = 0; i < atributos.length; i++) {
+            //obtenemos el nombre
+            String name = atributos[i].getName();
+            codigoSQL += "\t " + name + " ";
+
+            String tipo = atributos[i].getData_type();
+            try{
+                if (tipo.toLowerCase().equals("integer")) {
+                    codigoSQL += tipo.toLowerCase() + " ";
+                } else if (tipo.toLowerCase().equals("varying")) {
+                    int longitud = Integer.parseInt(atributos[i].getLength());
+                    codigoSQL += tipo.toLowerCase() + "(" + longitud + ") ";
+                }
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Dato vacio en el renglon " + (i+1));
+            }
+            //checmos si es nulo
+            boolean noNulo = atributos[i].isNot_null();
+            if (noNulo == true) {
+                codigoSQL += "NOT NULL";
+            }
+
+            //checamos si es llave primaria
+            boolean primaryKey = atributos[i].isPrimary_key();
+            if (primaryKey == true) {
+                llavesPrimarias.add(name);
+            }
+            codigoSQL += ",\n";
+
+        }
+        for (String llave : llavesPrimarias) {
+            codigoSQL += "\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")";
+        }
+        
+        codigoSQL+="\n);";
+        textoCodigoSQL.setText(codigoSQL);
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonGuardar;
     private javax.swing.JLabel etiquetaEntidad;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JPanel panelColumas;
+    private javax.swing.JPanel panelSQL;
+    private javax.swing.JTextArea textoCodigoSQL;
+    private javax.swing.JTextArea textoModeloRelacional;
     // End of variables declaration//GEN-END:variables
 }
