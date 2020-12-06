@@ -178,6 +178,8 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                     
                     //creamos el panel interno
                     ventanaDatos vd = new ventanaDatos(key, atributos, tipoEntidad);
+                    vd.setTabla(tabla);
+                    vd.setHashEntidades(hashEntidades);
                     panelEscritorio.add(vd);
                     vd.show();
 

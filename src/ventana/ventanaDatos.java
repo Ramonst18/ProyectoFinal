@@ -6,6 +6,7 @@
 package ventana;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -13,16 +14,31 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import proyectofinal.Atributos;
+import proyectofinal.ERDParser;
+
 /**
  *
  * @author Ramon
  */
+
 public class ventanaDatos extends javax.swing.JInternalFrame {
 
     private DefaultTableModel modeloTabla = new DefaultTableModel();
     private String tipoEntidad;
     private String key;
     private Atributos[] atributos;
+    private ERDParser tabla;
+    private Hashtable<String,ArrayList> hashEntidades;
+    
+    public void setTabla(ERDParser tabla) {
+        this.tabla = tabla;
+    }
+
+    public void setHashEntidades(Hashtable<String, ArrayList> hashEntidades) {
+        this.hashEntidades = hashEntidades;
+    }
+    
+    
     /**
      * Creates new form ventanaDatos
      * @param key     
@@ -315,6 +331,40 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
         }
         
+        //obtenemos las relaciones
+        ArrayList<String> relaciones = tabla.getRelaciones();
+        ArrayList<String> relacionesEncontradas = new ArrayList<>();
+        
+        for (String relacione : relaciones) {
+            System.out.println(relacione);
+            
+            if (relacione.contains(key)) {
+                relacionesEncontradas.add(relacione);
+            }
+        }
+        
+        //buscamos las relaciones
+        for (String re : relacionesEncontradas) {
+            String[] tablitas = re.split(" ");
+            String nombre = "";
+            //si la relacion de la tabla es muchos
+            if (tablitas[0].contains(key) && tablitas[1].equals("n")) {
+                //si la relacion es a muchos
+                nombre = tablitas[2];
+            } else if (tablitas[2].contains(key) && tablitas[3].equals("n")) {
+                nombre = tablitas[2];
+            }
+            
+            ArrayList<Atributos> atributos = hashEntidades.get(nombre);
+            for (Atributos atributo : atributos) {
+                for (Atributos llavesForania : llavesForanias) {
+                    if (atributo.getName().contains(llavesForania.getName())) {
+                        llavesForania.setTablaRelacionada(nombre);
+                    }
+                }
+            }
+        }
+        
         //agregamos el sql sobre la llave primaria
         for (String llave : llavesPrimarias) {
             codigoSQL += "\n\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")";
@@ -326,7 +376,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             codigoSQL += "\n\tCONSTRAINT " + llaveForania.getName()+"FK FOREIGN KEY ("+llaveForania.getName()+")";
             
             //se agrega la relacion con la otra tabla
-            codigoSQL += "\n\tREFERENCES "+""+" MATCH SIMPLE";
+            codigoSQL += "\n\tREFERENCES "+llaveForania.getTablaRelacionada()+" ("+llaveForania.getName()+") "+ "MATCH SIMPLE";
             
             //se agrega la actualizacion
             codigoSQL += "\n\tON UPDATE CASCADE\n" + "\tON DELETE CASCADE";

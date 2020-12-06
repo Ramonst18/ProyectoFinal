@@ -17,6 +17,7 @@ public class Atributos {
     private boolean not_null;
     private boolean primary_key;
     private boolean Foreign_key;
+    private String tablaRelacionada;
     
     public Atributos(String name,String data_type,String length,String precision,boolean not_null,boolean primary_key){
         this.name = name;
@@ -26,6 +27,14 @@ public class Atributos {
         this.not_null = not_null;
         this.primary_key = primary_key;
         
+    }
+
+    public String getTablaRelacionada() {
+        return tablaRelacionada;
+    }
+
+    public void setTablaRelacionada(String tablaRelacionada) {
+        this.tablaRelacionada = tablaRelacionada;
     }
 
     public String getName() {
