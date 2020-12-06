@@ -269,7 +269,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
 
         //guardadmos las primarias y las foranias
         ArrayList<String> llavesPrimarias = new ArrayList<>();
-        ArrayList<String> llavesForanias = new ArrayList<>();
+        ArrayList<Atributos> llavesForanias = new ArrayList<>();
         
         //recorremos todos los atributos
         for (int i = 0; i < this.atributos.length; i++) {
@@ -303,7 +303,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             //checamos si es llave foranea
             boolean llaveForania = this.atributos[i].isForeign_key();
             if (llaveForania == true) {
-                llavesForanias.add(name);
+                llavesForanias.add(this.atributos[i]);
             }
             
             //preguntamos si es el ultimo valor
@@ -321,9 +321,9 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         }
         
         //agregamos el sql sobre la llave forania
-        for (String llaveForania : llavesForanias) {
+        for (Atributos llaveForania : llavesForanias) {
             //se agrega los atributos de la tabla
-            codigoSQL += "\n\tCONSTRAINT " + llaveForania+"FK FOREIGN KEY ("+llaveForania+")";
+            codigoSQL += "\n\tCONSTRAINT " + llaveForania.getName()+"FK FOREIGN KEY ("+llaveForania.getName()+")";
             
             //se agrega la relacion con la otra tabla
             codigoSQL += "\n\tREFERENCES "+""+" MATCH SIMPLE";

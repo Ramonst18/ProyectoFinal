@@ -31,6 +31,12 @@ public class ERDParser {
     
     private ArrayList<String> keysEntidadesDebiles = new ArrayList<>();
     
+    private ArrayList<String> relaciones = new ArrayList<>();
+    
+    public ArrayList<String> getRelaciones(){
+        return this.relaciones;
+    }
+    
     public ArrayList<String> keysEntidadesDebiles(){
         return keysEntidadesDebiles;
     }
@@ -135,6 +141,9 @@ public class ERDParser {
 
             int n = cards.length();
 
+            
+            String R1 = "";
+            String R2 = "";
             for (int i = 0; i < n; i++) {
                 JSONObject e1 = cards.getJSONObject(i);
 
@@ -142,8 +151,16 @@ public class ERDParser {
                         e1.getString("min"),
                         e1.getString("max"));
 
+                //preguntamos por las relaciones
+                if (i == 0) {//si es la primera
+                    R1 = e1.getString("entidad") + " " + e1.getString("max");
+                }else{
+                    R2 = e1.getString("entidad") + " " + e1.getString("max");
+                }
             }
 
+            //metemos la relacion en el array
+            this.relaciones.add(R1 + " " + R2);
         }
         return hash;
     }

@@ -164,6 +164,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                 //obtener llaves primarias de las entidades    
                 ArrayList<String> keysEntidades = tabla.keysEntidades();
                 
+                
                 ArrayList<Atributos> atributos;
                 String tipoEntidad;
                 
