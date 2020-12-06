@@ -300,6 +300,10 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
                 } else if (tipo.toLowerCase().equals("varchar")) {
                     int longitud = Integer.parseInt(this.atributos[i].getLength());
                     codigoSQL += "character varying" + "(" + longitud + ") ";
+                } else if (tipo.toLowerCase().equals("serial")) {
+                    codigoSQL += "serial ";
+                } else if (tipo.toLowerCase().equals("date")) {
+                    codigoSQL += "date ";
                 }
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Dato vacio en el renglon " + (i+1));
@@ -329,6 +333,13 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
                 codigoSQL += ",\n";
             }
 
+        }
+        
+        
+        
+        //agregamos el sql sobre la llave primaria
+        for (String llave : llavesPrimarias) {
+            codigoSQL += "\n\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")";
         }
         
         //obtenemos las relaciones
@@ -363,11 +374,6 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
                     }
                 }
             }
-        }
-        
-        //agregamos el sql sobre la llave primaria
-        for (String llave : llavesPrimarias) {
-            codigoSQL += "\n\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")";
         }
         
         //agregamos el sql sobre la llave forania
