@@ -241,9 +241,15 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             this.atributos[i].setNot_null(not_null);
             this.atributos[i].setPrimary_key(primary_key);
             
-            if (primary_key == true) {
+            boolean llaveForania = atributos[i].isForeign_key();
+            
+            if (primary_key == true && llaveForania == false) {
                 modeloRelacional += name +"* , ";
-            }else{
+            }else if (primary_key == true && llaveForania == true) {
+                modeloRelacional +=" *" + name +"** , ";
+            } else if (llaveForania == true) {
+                modeloRelacional += name +"** , ";
+            } else {
                 //si la i al sumarse llegase a ser el numero de renglones
                 if ((i+1) == modeloTabla.getRowCount()) {
                     modeloRelacional += name;
@@ -261,8 +267,11 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
     private void crearCodigoSQL() {
         String codigoSQL = "CREATE TABLE " + this.key + " \n(\n";
 
-        //recorremos todos los atributos
+        //guardadmos las primarias y las foranias
         ArrayList<String> llavesPrimarias = new ArrayList<>();
+        ArrayList<String> llavesForanias = new ArrayList<>();
+        
+        //recorremos todos los atributos
         for (int i = 0; i < this.atributos.length; i++) {
             //obtenemos el nombre
             String name = this.atributos[i].getName();
@@ -290,12 +299,34 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             if (primaryKey == true) {
                 llavesPrimarias.add(name);
             }
+            
+            //checamos si es llave foranea
+            boolean llaveForania = this.atributos[i].isForeign_key();
+            if (llaveForania == true) {
+                llavesForanias.add(name);
+            }
+            
+            
             codigoSQL += ",\n";
 
         }
         
+        //agregamos el sql sobre la llave primaria
         for (String llave : llavesPrimarias) {
             codigoSQL += "\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")\n";
+        }
+        
+        //agregamos el sql sobre la llave forania
+        for (String llaveForania : llavesForanias) {
+            //se agrega los atributos de la tabla
+            codigoSQL += "\tCONSTRAINT " + llaveForania+"FK FOREIGN KEY ("+llaveForania+")\n";
+            
+            //se agrega la relacion con la otra tabla
+            codigoSQL += "\tREFERENCES "+""+" MATCH SIMPLE\n";
+            
+            //se agrega la actualizacion
+            codigoSQL += "\tON UPDATE CASCADE\n" + "\tON DELETE CASCADE";
+            
         }
         
         codigoSQL+="\n);";
