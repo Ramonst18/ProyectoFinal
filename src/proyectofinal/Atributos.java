@@ -16,6 +16,7 @@ public class Atributos {
     private String precision;
     private boolean not_null;
     private boolean primary_key;
+    private boolean Foreign_key;
     
     public Atributos(String name,String data_type,String length,String precision,boolean not_null,boolean primary_key){
         this.name = name;
@@ -73,6 +74,14 @@ public class Atributos {
 
     public void setPrimary_key(boolean primary_key) {
         this.primary_key = primary_key;
+    }
+
+    public boolean isForeign_key() {
+        return Foreign_key;
+    }
+
+    public void setForeign_key(boolean Foreign_key) {
+        this.Foreign_key = Foreign_key;
     }
     
     

@@ -101,6 +101,7 @@ public class ERDParser {
                     case 2://llave forania
                         System.out.println(" *");
                         entidadConAtribos = new Atributos(atributoTipo, null, null, null, false, false);
+                        entidadConAtribos.setForeign_key(true);
                         break;
                     default://atributo comun
                         System.out.println("");

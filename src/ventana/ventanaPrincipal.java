@@ -174,6 +174,7 @@ public class ventanaPrincipal extends javax.swing.JFrame {
                     atributos = hashEntidades.get(key);
                     System.out.println(key);
 
+                    
                     //creamos el panel interno
                     ventanaDatos vd = new ventanaDatos(key, atributos, tipoEntidad);
                     panelEscritorio.add(vd);

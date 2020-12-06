@@ -22,11 +22,14 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
     private DefaultTableModel modeloTabla = new DefaultTableModel();
     private String tipoEntidad;
     private String key;
+    private Atributos[] atributos;
     /**
      * Creates new form ventanaDatos
-     
+     * @param key     
+     * @param atributos     
+     * @param tipoEntidad     
      */
-    ArrayList<String> atributos;
+    
     public ventanaDatos(String key,ArrayList<Atributos> atributos,String tipoEntidad) {
         //primero se crea el modelo de la tabla
         agregarModeloTabla();
@@ -44,13 +47,25 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         addCheckBox(4,this.jTable1);
         addCheckBox(5,this.jTable1);
         
-        //obtenerSeleccion(this.jTable1.getSelectedColumn(), this.jTable1.getSelectedRow(), jTable1);
+        //metemos los atributos en nuestro arreglo de atributos
+        this.atributos = new Atributos[atributos.size()];
+        addAtributos(atributos);
     }
     
     private void obtenerSeleccion(int columna, int renglon,JTable table){
         System.out.println(columna + " " + renglon);
         Atributos at = (Atributos)table.getValueAt(renglon, columna);
         System.out.println(at.getName());
+    }
+    
+    private void addAtributos(ArrayList<Atributos> atributos){
+        int i = 0;
+        
+        //metemos los atributos
+        for (Atributos atributo : atributos) {
+            this.atributos[i] = atributo;
+            i++;
+        }
     }
     
     private void modificarEntidad(String key,String tipoEntidad){
@@ -103,7 +118,7 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         //creamos el comboBox
         JComboBox comboBox = new JComboBox();
         comboBox.addItem("SERIAL");
-        comboBox.addItem("VARYING");
+        comboBox.addItem("VARCHAR");
         comboBox.addItem("INTEGER");
         comboBox.addItem("DATE");
         
@@ -210,9 +225,6 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         }
         
         
-        //ddefinimos la longitud de los atributos y las columnas
-        Atributos[] atributosTabla = new Atributos[modeloTabla.getRowCount()];
-        
         //recorremos la tabla para llenar los atributos
         for (int i = 0; i < modeloTabla.getRowCount(); i++) {
             String name = (String)modeloTabla.getValueAt(i, 0);//obtenemos el nombre del atributo
@@ -221,7 +233,13 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
             String precision = (String)modeloTabla.getValueAt(i, 3);//obtenemos la precision
             boolean not_null = (boolean)modeloTabla.getValueAt(i, 4);//obtenemos si es o no nulo
             boolean primary_key = (boolean)modeloTabla.getValueAt(i, 5);//obtenemos si es llave primaria o no
-            atributosTabla[i] = new Atributos(name, dataType, length, precision, not_null, primary_key);
+            
+            //metemos los datos en nuestros atributos
+            this.atributos[i].setData_type(dataType);
+            this.atributos[i].setLength(length);
+            this.atributos[i].setPrecision(precision);
+            this.atributos[i].setNot_null(not_null);
+            this.atributos[i].setPrimary_key(primary_key);
             
             if (primary_key == true) {
                 modeloRelacional += name +"* , ";
@@ -237,46 +255,47 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
         
         modeloRelacional += ")";//se añade el final
         textoModeloRelacional.setText(modeloRelacional);
-        crearCodigoSQL(atributosTabla);
+        crearCodigoSQL();
     }//GEN-LAST:event_botonGuardarActionPerformed
     
-    private void crearCodigoSQL(Atributos[] atributos) {
+    private void crearCodigoSQL() {
         String codigoSQL = "CREATE TABLE " + this.key + " \n(\n";
 
         //recorremos todos los atributos
         ArrayList<String> llavesPrimarias = new ArrayList<>();
-        for (int i = 0; i < atributos.length; i++) {
+        for (int i = 0; i < this.atributos.length; i++) {
             //obtenemos el nombre
-            String name = atributos[i].getName();
+            String name = this.atributos[i].getName();
             codigoSQL += "\t " + name + " ";
 
-            String tipo = atributos[i].getData_type();
+            String tipo = this.atributos[i].getData_type();
             try{
                 if (tipo.toLowerCase().equals("integer")) {
                     codigoSQL += tipo.toLowerCase() + " ";
-                } else if (tipo.toLowerCase().equals("varying")) {
-                    int longitud = Integer.parseInt(atributos[i].getLength());
-                    codigoSQL += tipo.toLowerCase() + "(" + longitud + ") ";
+                } else if (tipo.toLowerCase().equals("varchar")) {
+                    int longitud = Integer.parseInt(this.atributos[i].getLength());
+                    codigoSQL += "character varying" + "(" + longitud + ") ";
                 }
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Dato vacio en el renglon " + (i+1));
             }
             //checmos si es nulo
-            boolean noNulo = atributos[i].isNot_null();
+            boolean noNulo = this.atributos[i].isNot_null();
             if (noNulo == true) {
                 codigoSQL += "NOT NULL";
             }
 
             //checamos si es llave primaria
-            boolean primaryKey = atributos[i].isPrimary_key();
+            boolean primaryKey = this.atributos[i].isPrimary_key();
             if (primaryKey == true) {
                 llavesPrimarias.add(name);
             }
             codigoSQL += ",\n";
 
         }
+        
         for (String llave : llavesPrimarias) {
-            codigoSQL += "\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")";
+            codigoSQL += "\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")\n";
         }
         
         codigoSQL+="\n);";
