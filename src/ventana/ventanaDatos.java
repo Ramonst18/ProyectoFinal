@@ -306,26 +306,30 @@ public class ventanaDatos extends javax.swing.JInternalFrame {
                 llavesForanias.add(name);
             }
             
-            
-            codigoSQL += ",\n";
+            //preguntamos si es el ultimo valor
+            if ((i+1)==this.atributos.length) {
+                codigoSQL += ",";
+            }else{
+                codigoSQL += ",\n";
+            }
 
         }
         
         //agregamos el sql sobre la llave primaria
         for (String llave : llavesPrimarias) {
-            codigoSQL += "\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")\n";
+            codigoSQL += "\n\tCONSTRAINT " + llave + "key PRIMARY KEY (" + llave + ")";
         }
         
         //agregamos el sql sobre la llave forania
         for (String llaveForania : llavesForanias) {
             //se agrega los atributos de la tabla
-            codigoSQL += "\tCONSTRAINT " + llaveForania+"FK FOREIGN KEY ("+llaveForania+")\n";
+            codigoSQL += "\n\tCONSTRAINT " + llaveForania+"FK FOREIGN KEY ("+llaveForania+")";
             
             //se agrega la relacion con la otra tabla
-            codigoSQL += "\tREFERENCES "+""+" MATCH SIMPLE\n";
+            codigoSQL += "\n\tREFERENCES "+""+" MATCH SIMPLE";
             
             //se agrega la actualizacion
-            codigoSQL += "\tON UPDATE CASCADE\n" + "\tON DELETE CASCADE";
+            codigoSQL += "\n\tON UPDATE CASCADE\n" + "\tON DELETE CASCADE";
             
         }
         
